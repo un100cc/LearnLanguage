@@ -458,17 +458,19 @@ const vocab = [
   { hanzi:'好食', phonetic:'Ho shit', thai:'อร่อย', category:'อาหาร', distractors:['ไม่อร่อย','อิ่มแล้ว','หิวข้าว','เผ็ด'] },
   { hanzi:'辣', phonetic:'Lad', thai:'เผ็ด', category:'อาหาร', distractors:['หวาน','เค็ม','เปรี้ยว','อร่อย'] },
 
-  // ตัวเลข
-  { hanzi:'一', phonetic:'Yid', thai:'หนึ่ง', category:'ตัวเลข', distractors:['สอง','สาม','สี่','ห้า'] },
-  { hanzi:'二', phonetic:'Ngi', thai:'สอง', category:'ตัวเลข', distractors:['หนึ่ง','สาม','สี่','หก'] },
-  { hanzi:'三', phonetic:'Sam', thai:'สาม', category:'ตัวเลข', distractors:['สอง','สี่','ห้า','เจ็ด'] },
-  { hanzi:'四', phonetic:'Xi', thai:'สี่', category:'ตัวเลข', distractors:['สาม','ห้า','หก','แปด'] },
-  { hanzi:'五', phonetic:'Ng', thai:'ห้า', category:'ตัวเลข', distractors:['สี่','หก','เจ็ด','เก้า'] },
-  { hanzi:'六', phonetic:'Liug', thai:'หก', category:'ตัวเลข', distractors:['ห้า','เจ็ด','แปด','สิบ'] },
-  { hanzi:'七', phonetic:'Qid', thai:'เจ็ด', category:'ตัวเลข', distractors:['หก','แปด','เก้า','สาม'] },
-  { hanzi:'八', phonetic:'Bad', thai:'แปด', category:'ตัวเลข', distractors:['เจ็ด','เก้า','สิบ','สอง'] },
-  { hanzi:'九', phonetic:'Giu', thai:'เก้า', category:'ตัวเลข', distractors:['แปด','สิบ','หก','สี่'] },
-  { hanzi:'十', phonetic:'Siib', thai:'สิบ', category:'ตัวเลข', distractors:['เก้า','ยี่สิบ','ห้า','เจ็ด'] },
+  // ตัวเลข (สำเนียงไทย)
+  { hanzi:'一', phonetic:'ยิ๊ด', thai:'หนึ่ง', category:'ตัวเลข', distractors:['สอง','สาม','สี่','ห้า'] },
+  { hanzi:'二', phonetic:'เลี่ยง', thai:'สอง', category:'ตัวเลข', distractors:['หนึ่ง','สาม','สี่','หก'] },
+  { hanzi:'三', phonetic:'ส้าม', thai:'สาม', category:'ตัวเลข', distractors:['สอง','สี่','ห้า','เจ็ด'] },
+  { hanzi:'四', phonetic:'สี๊', thai:'สี่', category:'ตัวเลข', distractors:['สาม','ห้า','หก','แปด'] },
+  { hanzi:'五', phonetic:'อึ้ง', thai:'ห้า', category:'ตัวเลข', distractors:['สี่','หก','เจ็ด','เก้า'] },
+  { hanzi:'六', phonetic:'ลุ้ก', thai:'หก', category:'ตัวเลข', distractors:['ห้า','เจ็ด','แปด','สิบ'] },
+  { hanzi:'七', phonetic:'ชิ๊ด', thai:'เจ็ด', category:'ตัวเลข', distractors:['หก','แปด','เก้า','สาม'] },
+  { hanzi:'八', phonetic:'ปัด', thai:'แปด', category:'ตัวเลข', distractors:['เจ็ด','เก้า','สิบ','สอง'] },
+  { hanzi:'九', phonetic:'กิ๋ว', thai:'เก้า', category:'ตัวเลข', distractors:['แปด','สิบ','หก','สี่'] },
+  { hanzi:'十', phonetic:'สิ๊บ', thai:'สิบ', category:'ตัวเลข', distractors:['เก้า','ร้อย','ห้า','เจ็ด'] },
+  { hanzi:'百', phonetic:'ปัก', thai:'ร้อย', category:'ตัวเลข', distractors:['สิบ','พัน','หมื่น','ล้าน'] },
+  { hanzi:'千', phonetic:'หวั่น', thai:'พัน', category:'ตัวเลข', distractors:['ร้อย','หมื่น','สิบ','ล้าน'] },
 
   // สี
   { hanzi:'紅', phonetic:'Fung', thai:'สีแดง', category:'สี', distractors:['สีขาว','สีดำ','สีน้ำเงิน','สีเหลือง'] },
@@ -506,6 +508,86 @@ const vocab = [
   { hanzi:'貴', phonetic:'Gui', thai:'แพง', category:'คุณศัพท์', distractors:['ถูก','ใหญ่','เล็ก','หนัก'] },
   { hanzi:'熱', phonetic:'Ngied', thai:'ร้อน', category:'คุณศัพท์', distractors:['เย็น','อุ่น','หนาว','เปียก'] },
   { hanzi:'冷', phonetic:'Lang', thai:'เย็น / หนาว', category:'คุณศัพท์', distractors:['ร้อน','อุ่น','แห้ง','เปียก'] },
+
+  // ── แฮกกาไทย — อาหาร & เครื่องดื่ม ──
+  { hanzi:'食飯', phonetic:'ซิดผ่อน', thai:'กินข้าว', category:'แฮกกาไทย·อาหาร', distractors:['กินโจ๊ก','ดื่มน้ำ','กินขนม','กินยา'] },
+  { hanzi:'食粥', phonetic:'ซิดจุ๊ก', thai:'กินโจ๊ก', category:'แฮกกาไทย·อาหาร', distractors:['กินข้าว','กินก๋วยเตี๋ยว','ดื่มน้ำ','กินยา'] },
+  { hanzi:'食水', phonetic:'ซิดซุย', thai:'ดื่มน้ำ', category:'แฮกกาไทย·อาหาร', distractors:['กินข้าว','กินโจ๊ก','ดื่มชา','กินยา'] },
+  { hanzi:'食麵', phonetic:'ซิดเมี่ยน', thai:'กินบะหมี่', category:'แฮกกาไทย·อาหาร', distractors:['กินข้าว','กินโจ๊ก','กินก๋วยเตี๋ยว','ดื่มน้ำ'] },
+  { hanzi:'食粿條', phonetic:'ซิดซุ๊ยปั้น', thai:'กินก๋วยเตี๋ยว', category:'แฮกกาไทย·อาหาร', distractors:['กินบะหมี่','กินข้าว','กินโจ๊ก','ดื่มน้ำ'] },
+  { hanzi:'食藥', phonetic:'ซิดยก', thai:'กินยา', category:'แฮกกาไทย·อาหาร', distractors:['กินข้าว','กินโจ๊ก','ดื่มน้ำ','กินขนม'] },
+  { hanzi:'飯菜', phonetic:'โช่ยโป้ง', thai:'ข้าวกับกับข้าว', category:'แฮกกาไทย·อาหาร', distractors:['ข้าวต้ม','ก๋วยเตี๋ยว','ขนม','อาหารเช้า'] },
+  { hanzi:'豬肉', phonetic:'จุ๊งยุก', thai:'เนื้อหมู', category:'แฮกกาไทย·อาหาร', distractors:['เนื้อวัว','เนื้อไก่','เนื้อปลา','เนื้อเป็ด'] },
+  { hanzi:'卵', phonetic:'ล่อน', thai:'ไข่', category:'แฮกกาไทย·อาหาร', distractors:['เนื้อหมู','ผัก','ข้าว','ปลา'] },
+  { hanzi:'橙', phonetic:'ก๊ำ', thai:'ส้ม (ผลไม้)', category:'แฮกกาไทย·อาหาร', distractors:['สับปะรด','มะม่วง','กล้วย','มังคุด'] },
+  { hanzi:'鳳梨', phonetic:'หว่องหลี่', thai:'สับปะรด', category:'แฮกกาไทย·อาหาร', distractors:['ส้ม','มะม่วง','กล้วย','ทุเรียน'] },
+  { hanzi:'飽', phonetic:'เป้า', thai:'อิ่มแล้ว', category:'แฮกกาไทย·อาหาร', distractors:['หิว','กระหาย','เมื่อย','ง่วง'] },
+  { hanzi:'肚餓', phonetic:'ตู้ค่วย', thai:'หิวข้าว', category:'แฮกกาไทย·อาหาร', distractors:['อิ่มแล้ว','กระหายน้ำ','เมื่อย','ง่วงนอน'] },
+
+  // ── แฮกกาไทย — สัตว์ ──
+  { hanzi:'雞', phonetic:'เก๊', thai:'ไก่', category:'แฮกกาไทย·สัตว์', distractors:['หมู','วัว','ปลา','แมว'] },
+  { hanzi:'牛', phonetic:'เหงี๋ยว', thai:'วัว', category:'แฮกกาไทย·สัตว์', distractors:['หมู','ไก่','ควาย','ม้า'] },
+  { hanzi:'蛇', phonetic:'สา', thai:'งู', category:'แฮกกาไทย·สัตว์', distractors:['จระเข้','กิ้งก่า','กบ','แมลง'] },
+  { hanzi:'魚', phonetic:'อึ๋ง', thai:'ปลา', category:'แฮกกาไทย·สัตว์', distractors:['กุ้ง','ปู','หมึก','หอย'] },
+  { hanzi:'貓', phonetic:'เงี่ยว', thai:'แมว', category:'แฮกกาไทย·สัตว์', distractors:['หมา','หมู','วัว','ไก่'] },
+  { hanzi:'狗', phonetic:'เก๋ว', thai:'หมา', category:'แฮกกาไทย·สัตว์', distractors:['แมว','หมู','วัว','ไก่'] },
+  { hanzi:'象', phonetic:'เชี่ยง', thai:'ช้าง', category:'แฮกกาไทย·สัตว์', distractors:['ม้า','วัว','เสือ','สิงโต'] },
+  { hanzi:'鬼', phonetic:'กุ๋ย', thai:'ผี', category:'แฮกกาไทย·สัตว์', distractors:['นางฟ้า','ยักษ์','มังกร','เทพ'] },
+
+  // ── แฮกกาไทย — ร่างกาย ──
+  { hanzi:'眼', phonetic:'มุ๊กจู๊', thai:'ตา', category:'แฮกกาไทย·ร่างกาย', distractors:['หู','จมูก','ปาก','มือ'] },
+  { hanzi:'口', phonetic:'โจ่ย', thai:'ปาก', category:'แฮกกาไทย·ร่างกาย', distractors:['ตา','หู','จมูก','มือ'] },
+  { hanzi:'頭毛', phonetic:'โม้', thai:'ผม', category:'แฮกกาไทย·ร่างกาย', distractors:['หนวด','คิ้ว','ขน','เล็บ'] },
+
+  // ── แฮกกาไทย — การกระทำ ──
+  { hanzi:'去', phonetic:'ฮี้', thai:'ไป', category:'แฮกกาไทย·กริยา', distractors:['มา','กลับ','หยุด','นั่ง'] },
+  { hanzi:'坐', phonetic:'ชอ', thai:'นั่ง', category:'แฮกกาไทย·กริยา', distractors:['ยืน','นอน','วิ่ง','เดิน'] },
+  { hanzi:'看', phonetic:'โค่น', thai:'ดู / มอง', category:'แฮกกาไทย·กริยา', distractors:['ฟัง','พูด','กิน','นอน'] },
+  { hanzi:'買', phonetic:'ไม๊', thai:'ซื้อ', category:'แฮกกาไทย·กริยา', distractors:['ขาย','ให้','รับ','เอา'] },
+  { hanzi:'賣', phonetic:'ใหม่', thai:'ขาย', category:'แฮกกาไทย·กริยา', distractors:['ซื้อ','ให้','รับ','เอา'] },
+  { hanzi:'玩', phonetic:'เลี้ยว', thai:'เล่น', category:'แฮกกาไทย·กริยา', distractors:['ทำงาน','นอน','กิน','อ่าน'] },
+  { hanzi:'講', phonetic:'โก๊งโว้ย', thai:'พูด', category:'แฮกกาไทย·กริยา', distractors:['ฟัง','ดู','เขียน','อ่าน'] },
+  { hanzi:'愛', phonetic:'เซียก', thai:'รัก', category:'แฮกกาไทย·กริยา', distractors:['เกลียด','กลัว','ชอบ','ลืม'] },
+  { hanzi:'痛', phonetic:'ชิด', thai:'เจ็บ / ปวด', category:'แฮกกาไทย·กริยา', distractors:['คัน','ชา','บวม','หาย'] },
+  { hanzi:'沖涼', phonetic:'ชุงหล่อง', thai:'อาบน้ำ', category:'แฮกกาไทย·กริยา', distractors:['แปรงฟัน','หวีผม','ล้างหน้า','ล้างมือ'] },
+  { hanzi:'洗腳', phonetic:'เซ่เกวียก', thai:'ล้างเท้า', category:'แฮกกาไทย·กริยา', distractors:['ล้างมือ','ล้างหน้า','อาบน้ำ','แปรงฟัน'] },
+  { hanzi:'搽粉', phonetic:'ฉ๋าฝุ้น', thai:'แต่งหน้า / ทาแป้ง', category:'แฮกกาไทย·กริยา', distractors:['อาบน้ำ','หวีผม','ล้างหน้า','ใส่เสื้อ'] },
+  { hanzi:'開門', phonetic:'โค้ยหมุน', thai:'เปิดประตู', category:'แฮกกาไทย·กริยา', distractors:['ปิดประตู','เปิดหน้าต่าง','ปิดไฟ','เปิดไฟ'] },
+  { hanzi:'關門', phonetic:'ก้วนหมุน', thai:'ปิดประตู', category:'แฮกกาไทย·กริยา', distractors:['เปิดประตู','ปิดหน้าต่าง','เปิดไฟ','ปิดไฟ'] },
+  { hanzi:'去看戲', phonetic:'ฮี้ข้อนฮี้', thai:'ไปดูหนัง', category:'แฮกกาไทย·กริยา', distractors:['ไปกินข้าว','ไปเที่ยว','ไปซื้อของ','ไปนอน'] },
+  { hanzi:'去遊', phonetic:'ฮี้เลี้ยว', thai:'ไปเที่ยว', category:'แฮกกาไทย·กริยา', distractors:['ไปดูหนัง','ไปกินข้าว','ไปซื้อของ','ไปทำงาน'] },
+
+  // ── แฮกกาไทย — การเดินทาง ──
+  { hanzi:'坐飛機', phonetic:'ชอฟีกี', thai:'นั่งเครื่องบิน', category:'แฮกกาไทย·เดินทาง', distractors:['นั่งเรือ','นั่งรถ','นั่งสามล้อ','เดินเท้า'] },
+  { hanzi:'坐船', phonetic:'ชอสุ่น', thai:'นั่งเรือ', category:'แฮกกาไทย·เดินทาง', distractors:['นั่งเครื่องบิน','นั่งรถ','นั่งสามล้อ','เดินเท้า'] },
+  { hanzi:'坐車', phonetic:'ชอชา', thai:'นั่งรถ', category:'แฮกกาไทย·เดินทาง', distractors:['นั่งเรือ','นั่งเครื่องบิน','นั่งสามล้อ','เดินเท้า'] },
+  { hanzi:'坐三輪車', phonetic:'ชอซัมหลุ่นชา', thai:'นั่งสามล้อ', category:'แฮกกาไทย·เดินทาง', distractors:['นั่งรถ','นั่งเรือ','นั่งมอเตอร์ไซค์','เดินเท้า'] },
+
+  // ── แฮกกาไทย — คนและสรรพนาม ──
+  { hanzi:'我', phonetic:'ไง้', thai:'ฉัน / ผม', category:'แฮกกาไทย·สรรพนาม', distractors:['คุณ','เขา','พวกเรา','พวกเขา'] },
+  { hanzi:'你', phonetic:'หงี่', thai:'คุณ', category:'แฮกกาไทย·สรรพนาม', distractors:['ฉัน','เขา','พวกเรา','พวกเขา'] },
+  { hanzi:'佢', phonetic:'กี๋', thai:'เขา / เธอ', category:'แฮกกาไทย·สรรพนาม', distractors:['ฉัน','คุณ','พวกเรา','พวกเขา'] },
+  { hanzi:'人', phonetic:'หงิน', thai:'คน', category:'แฮกกาไทย·สรรพนาม', distractors:['สัตว์','ผี','เทวดา','ยักษ์'] },
+  { hanzi:'中國人', phonetic:'ถ่องหงิน', thai:'คนจีน', category:'แฮกกาไทย·สรรพนาม', distractors:['คนไทย','คนญี่ปุ่น','คนเกาหลี','คนฝรั่ง'] },
+  { hanzi:'泰國人', phonetic:'ปู้หย่องหงิน', thai:'คนไทย', category:'แฮกกาไทย·สรรพนาม', distractors:['คนจีน','คนญี่ปุ่น','คนเกาหลี','คนลาว'] },
+  { hanzi:'瘋人', phonetic:'เตี๋ยนหงิน', thai:'คนบ้า', category:'แฮกกาไทย·สรรพนาม', distractors:['คนดี','คนฉลาด','คนรวย','คนจน'] },
+
+  // ── แฮกกาไทย — สิ่งของ ──
+  { hanzi:'電視', phonetic:'เที่ยนฮี้', thai:'โทรทัศน์', category:'แฮกกาไทย·สิ่งของ', distractors:['วิทยุ','พัดลม','โทรศัพท์','คอมพิวเตอร์'] },
+  { hanzi:'風扇', phonetic:'ฟุ้งเซ่น', thai:'พัดลม', category:'แฮกกาไทย·สิ่งของ', distractors:['แอร์','โทรทัศน์','ตู้เย็น','เตาไฟ'] },
+  { hanzi:'湯匙', phonetic:'ท่องสี', thai:'ช้อน', category:'แฮกกาไทย·สิ่งของ', distractors:['ส้อม','ตะเกียบ','มีด','จาน'] },
+  { hanzi:'碟', phonetic:'วั้น', thai:'จาน', category:'แฮกกาไทย·สิ่งของ', distractors:['ช้อน','ถ้วย','กระทะ','หม้อ'] },
+  { hanzi:'錢', phonetic:'เฉี๋ยน', thai:'เงิน', category:'แฮกกาไทย·สิ่งของ', distractors:['ทอง','เพชร','เงินเดือน','หนี้'] },
+  { hanzi:'金', phonetic:'กิ้ม', thai:'ทอง', category:'แฮกกาไทย·สิ่งของ', distractors:['เงิน','เพชร','เหล็ก','ทองแดง'] },
+  { hanzi:'衫', phonetic:'ซั้ม', thai:'เสื้อ', category:'แฮกกาไทย·สิ่งของ', distractors:['กางเกง','รองเท้า','หมวก','ถุงเท้า'] },
+  { hanzi:'褲', phonetic:'คู่', thai:'กางเกง', category:'แฮกกาไทย·สิ่งของ', distractors:['เสื้อ','รองเท้า','หมวก','ถุงเท้า'] },
+  { hanzi:'靴', phonetic:'เห', thai:'รองเท้า', category:'แฮกกาไทย·สิ่งของ', distractors:['เสื้อ','กางเกง','หมวก','ถุงเท้า'] },
+  { hanzi:'書', phonetic:'ซู้', thai:'หนังสือ', category:'แฮกกาไทย·สิ่งของ', distractors:['ดินสอ','ปากกา','กระดาษ','กระเป๋า'] },
+  { hanzi:'廁所', phonetic:'กุ้งซี่ลุ้ง', thai:'ห้องน้ำ', category:'แฮกกาไทย·สิ่งของ', distractors:['ห้องนอน','ห้องครัว','ห้องรับแขก','โรงรถ'] },
+
+  // ── แฮกกาไทย — ประโยคคำถาม ──
+  { hanzi:'做乜', phonetic:'โจ้มั๊กไก่', thai:'ทำอะไร?', category:'แฮกกาไทย·ประโยค', distractors:['ไปไหน?','กินอะไร?','อยู่ที่ไหน?','กี่โมง?'] },
+  { hanzi:'去邊', phonetic:'คี่รี่วุ่ย', thai:'ไปไหน?', category:'แฮกกาไทย·ประโยค', distractors:['ทำอะไร?','กินอะไร?','กี่โมง?','ราคาเท่าไหร่?'] },
 
   // ── สำเนียง詔安 (Zhao'an) — ทักทาย ──
   { hanzi:'勢早', phonetic:'Si^ zao^', thai:'อรุณสวัสดิ์', category:'詔安·ทักทาย', distractors:['ลาก่อน','ขอบคุณ','สบายดีไหม','โชคดี'] },
