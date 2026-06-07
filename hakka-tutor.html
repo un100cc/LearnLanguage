@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เรียนภาษาแฮกกา 客家話 🎮</title>
+<style>
+  :root {
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --accent: #e94560;
+    --gold: #f5a623;
+    --green: #00c896;
+    --blue: #4fc3f7;
+    --purple: #9c27b0;
+    --text: #e0e0e0;
+    --muted: #888;
+    --border: #2a2a4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Noto Sans Thai', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  /* ── Header ── */
+  .header {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .logo { font-size: 1.6rem; }
+  .title { font-size: 1.1rem; font-weight: 700; }
+  .subtitle { font-size: 0.75rem; color: var(--muted); }
+
+  /* ── Level badge ── */
+  .level-badge {
+    margin-left: auto;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ── XP bar ── */
+  .xp-section {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 20px;
+  }
+  .xp-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .xp-bar-bg {
+    background: var(--border);
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .xp-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--green), var(--blue));
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ── Stats row ── */
+  .stats-row {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .stat-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  .stat-val { font-size: 1.3rem; font-weight: 700; }
+  .stat-lbl { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+  .stat-box.xp .stat-val { color: var(--gold); }
+  .stat-box.streak .stat-val { color: var(--accent); }
+  .stat-box.correct .stat-val { color: var(--green); }
+
+  /* ── Question card ── */
+  .question-card {
+    width: 100%;
+    max-width: 640px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px 22px;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--blue), var(--green));
+  }
+  .q-num {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hanzi {
+    font-size: 4.5rem;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+  }
+  .hanzi:hover { transform: scale(1.05); }
+  .hanzi:active { transform: scale(0.97); }
+  .phonetic {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--blue);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .audio-hint {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .category-tag {
+    display: inline-block;
+    background: rgba(79,195,247,0.12);
+    color: var(--blue);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.68rem;
+    margin-bottom: 14px;
+  }
+  .question-text {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--text);
+    margin-top: 12px;
+  }
+
+  /* ── Choices ── */
+  .choices {
+    width: 100%;
+    max-width: 640px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .choice-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    color: var(--text);
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .choice-btn:hover:not(:disabled) {
+    border-color: var(--blue);
+    background: rgba(79,195,247,0.06);
+    transform: translateY(-1px);
+  }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.correct {
+    border-color: var(--green);
+    background: rgba(0,200,150,0.12);
+    color: var(--green);
+  }
+  .choice-btn.wrong {
+    border-color: var(--accent);
+    background: rgba(233,69,96,0.12);
+    color: var(--accent);
+  }
+  .choice-label {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .choice-btn.correct .choice-label { background: var(--green); color: #000; }
+  .choice-btn.wrong .choice-label { background: var(--accent); color: #fff; }
+
+  /* ── Feedback ── */
+  .feedback {
+    width: 100%;
+    max-width: 640px;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,200,150,0.1);
+    border: 1px solid rgba(0,200,150,0.3);
+  }
+  .feedback.wrong-fb {
+    background: rgba(233,69,96,0.1);
+    border: 1px solid rgba(233,69,96,0.3);
+  }
+  .fb-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+  .fb-correct .fb-title { color: var(--green); }
+  .fb-wrong .fb-title { color: var(--accent); }
+  .fb-detail { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+  .fb-xp {
+    display: inline-block;
+    background: var(--gold);
+    color: #000;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  /* ── Level up banner ── */
+  .levelup-banner {
+    width: 100%;
+    max-width: 640px;
+    background: linear-gradient(135deg, #1a0a2e, #2a0a1e);
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    display: none;
+    animation: pop 0.4s cubic-bezier(.36,.07,.19,.97);
+    margin-bottom: 16px;
+  }
+  .levelup-banner.show { display: block; }
+  .levelup-banner h2 { color: var(--gold); font-size: 1.4rem; margin-bottom: 6px; }
+  .levelup-banner p { color: var(--text); font-size: 0.88rem; }
+
+  /* ── Next button ── */
+  .next-btn {
+    width: 100%;
+    max-width: 640px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-bottom: 20px;
+  }
+  .next-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .next-btn.show { display: block; }
+
+  /* ── Audio btn ── */
+  .audio-btn {
+    background: none;
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    color: var(--blue);
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .audio-btn:hover { background: rgba(79,195,247,0.1); }
+
+  /* ── Progress ── */
+  .progress-section {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .prog-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done-correct { background: var(--green); }
+  .prog-dot.done-wrong { background: var(--accent); }
+  .prog-dot.current { background: var(--gold); animation: pulse 1s infinite; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pop { 0%,100%{transform:scale(1)} 40%{transform:scale(1.04)} 70%{transform:scale(0.97)} }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo">🀄</div>
+  <div>
+    <div class="title">เรียนภาษาแฮกกา 客家話</div>
+    <div class="subtitle">สำหรับคนไทย · XP Game</div>
+  </div>
+  <div class="level-badge" id="levelBadge">🌱 Beginner</div>
+</div>
+
+<!-- XP Bar -->
+<div class="xp-section">
+  <div class="xp-row">
+    <span id="xpLabel">XP: 0</span>
+    <span id="nextLabel">ถัดไป: 50 XP</span>
+  </div>
+  <div class="xp-bar-bg">
+    <div class="xp-bar-fill" id="xpBar" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stat-box xp">
+    <div class="stat-val" id="statXP">0</div>
+    <div class="stat-lbl">⭐ XP รวม</div>
+  </div>
+  <div class="stat-box streak">
+    <div class="stat-val" id="statStreak">0</div>
+    <div class="stat-lbl">🔥 Streak</div>
+  </div>
+  <div class="stat-box correct">
+    <div class="stat-val" id="statCorrect">0/0</div>
+    <div class="stat-lbl">✅ ถูก/ทั้งหมด</div>
+  </div>
+</div>
+
+<!-- Progress dots -->
+<div class="progress-section" id="progressDots"></div>
+
+<!-- Level-up banner -->
+<div class="levelup-banner" id="levelupBanner">
+  <h2>🎉 เลเวลอัพ!</h2>
+  <p id="levelupText">คุณขึ้นเลเวลใหม่แล้ว!</p>
+</div>
+
+<!-- Question Card -->
+<div class="question-card" id="questionCard">
+  <div class="q-num" id="qNum">คำถาม 1 / 10</div>
+  <div style="display:flex; justify-content:center; margin-bottom:8px;">
+    <span class="category-tag" id="catTag">หมวด: ทักทาย</span>
+  </div>
+  <div class="hanzi" id="hanzi" title="คลิกเพื่อฟังเสียง" onclick="playAudio()">你好</div>
+  <div class="phonetic" id="phonetic">Ngi ho</div>
+  <div class="audio-hint">👆 แตะตัวอักษรเพื่อฟังเสียง</div>
+  <div class="question-text">คำนี้แปลว่าอะไร?</div>
+</div>
+
+<!-- Choices -->
+<div class="choices" id="choices"></div>
+
+<!-- Feedback -->
+<div class="feedback" id="feedback">
+  <div class="fb-title" id="fbTitle"></div>
+  <div class="fb-detail" id="fbDetail"></div>
+  <button class="audio-btn" onclick="playAudio()">🔊 ฟังอีกครั้ง</button>
+  <div><span class="fb-xp" id="fbXP">+10 XP</span></div>
+</div>
+
+<!-- Next -->
+<button class="next-btn" id="nextBtn" onclick="nextQuestion()">ถัดไป →</button>
+
+<script>
+// ──────────────────────────────
+// Vocabulary Pool
+// ──────────────────────────────
+const vocab = [
+  // ทักทาย
+  { hanzi:'你好', phonetic:'Ngi ho', thai:'สวัสดี', category:'ทักทาย', distractors:['ขอบคุณ','ลาก่อน','ขอโทษ','อร่อย'] },
+  { hanzi:'再見', phonetic:'Choi kien', thai:'ลาก่อน', category:'ทักทาย', distractors:['สวัสดี','ขอบคุณ','ยินดี','ไม่เป็นไร'] },
+  { hanzi:'多謝', phonetic:'To cia', thai:'ขอบคุณ', category:'ทักทาย', distractors:['สวัสดี','ลาก่อน','ขอโทษ','ยินดีต้อนรับ'] },
+  { hanzi:'對唔住', phonetic:'Toi m̈ zhu', thai:'ขอโทษ', category:'ทักทาย', distractors:['ขอบคุณ','ไม่เป็นไร','สวัสดี','อร่อย'] },
+  { hanzi:'唔緊要', phonetic:'M̈ gin yau', thai:'ไม่เป็นไร', category:'ทักทาย', distractors:['ขอโทษ','ขอบคุณ','สวัสดี','แพง'] },
+  { hanzi:'歡迎', phonetic:'Fun yiang', thai:'ยินดีต้อนรับ', category:'ทักทาย', distractors:['ลาก่อน','ขอโทษ','ขอบคุณ','รัก'] },
+
+  // ครอบครัว
+  { hanzi:'阿爸', phonetic:'A ba', thai:'พ่อ', category:'ครอบครัว', distractors:['แม่','พี่ชาย','ปู่','ลูกชาย'] },
+  { hanzi:'阿媽', phonetic:'A ma', thai:'แม่', category:'ครอบครัว', distractors:['พ่อ','น้องสาว','ยาย','ลูกสาว'] },
+  { hanzi:'阿哥', phonetic:'A go', thai:'พี่ชาย', category:'ครอบครัว', distractors:['พ่อ','น้องชาย','ลูกชาย','ปู่'] },
+  { hanzi:'阿姐', phonetic:'A cia', thai:'พี่สาว', category:'ครอบครัว', distractors:['แม่','น้องสาว','ยาย','ลูกสาว'] },
+  { hanzi:'阿弟', phonetic:'A ti', thai:'น้องชาย', category:'ครอบครัว', distractors:['พ่อ','พี่ชาย','ปู่','ลูกชาย'] },
+  { hanzi:'阿妹', phonetic:'A moi', thai:'น้องสาว', category:'ครอบครัว', distractors:['แม่','พี่สาว','ยาย','ลูกสาว'] },
+  { hanzi:'阿公', phonetic:'A gung', thai:'ปู่/ตา', category:'ครอบครัว', distractors:['ยาย','พ่อ','ลุง','พี่ชาย'] },
+  { hanzi:'阿婆', phonetic:'A po', thai:'ยาย/ย่า', category:'ครอบครัว', distractors:['ปู่','แม่','น้า','พี่สาว'] },
+
+  // อาหาร
+  { hanzi:'飯', phonetic:'Fan', thai:'ข้าว', category:'อาหาร', distractors:['น้ำ','ผัก','หมู','ไก่'] },
+  { hanzi:'水', phonetic:'Sui', thai:'น้ำ', category:'อาหาร', distractors:['ข้าว','ชา','เหล้า','น้ำตาล'] },
+  { hanzi:'茶', phonetic:'Ca', thai:'ชา', category:'อาหาร', distractors:['น้ำ','กาแฟ','เหล้า','น้ำผึ้ง'] },
+  { hanzi:'豬肉', phonetic:'Zu ngiug', thai:'เนื้อหมู', category:'อาหาร', distractors:['เนื้อไก่','เนื้อวัว','เนื้อปลา','ผัก'] },
+  { hanzi:'雞', phonetic:'Gai', thai:'ไก่', category:'อาหาร', distractors:['หมู','วัว','ปลา','เป็ด'] },
+  { hanzi:'魚', phonetic:'Ng', thai:'ปลา', category:'อาหาร', distractors:['หมู','ไก่','ผัก','กุ้ง'] },
+  { hanzi:'好食', phonetic:'Ho shit', thai:'อร่อย', category:'อาหาร', distractors:['ไม่อร่อย','อิ่มแล้ว','หิวข้าว','เผ็ด'] },
+  { hanzi:'辣', phonetic:'Lad', thai:'เผ็ด', category:'อาหาร', distractors:['หวาน','เค็ม','เปรี้ยว','อร่อย'] },
+
+  // ตัวเลข
+  { hanzi:'一', phonetic:'Yid', thai:'หนึ่ง', category:'ตัวเลข', distractors:['สอง','สาม','สี่','ห้า'] },
+  { hanzi:'二', phonetic:'Ngi', thai:'สอง', category:'ตัวเลข', distractors:['หนึ่ง','สาม','สี่','หก'] },
+  { hanzi:'三', phonetic:'Sam', thai:'สาม', category:'ตัวเลข', distractors:['สอง','สี่','ห้า','เจ็ด'] },
+  { hanzi:'四', phonetic:'Xi', thai:'สี่', category:'ตัวเลข', distractors:['สาม','ห้า','หก','แปด'] },
+  { hanzi:'五', phonetic:'Ng', thai:'ห้า', category:'ตัวเลข', distractors:['สี่','หก','เจ็ด','เก้า'] },
+  { hanzi:'六', phonetic:'Liug', thai:'หก', category:'ตัวเลข', distractors:['ห้า','เจ็ด','แปด','สิบ'] },
+  { hanzi:'七', phonetic:'Qid', thai:'เจ็ด', category:'ตัวเลข', distractors:['หก','แปด','เก้า','สาม'] },
+  { hanzi:'八', phonetic:'Bad', thai:'แปด', category:'ตัวเลข', distractors:['เจ็ด','เก้า','สิบ','สอง'] },
+  { hanzi:'九', phonetic:'Giu', thai:'เก้า', category:'ตัวเลข', distractors:['แปด','สิบ','หก','สี่'] },
+  { hanzi:'十', phonetic:'Siib', thai:'สิบ', category:'ตัวเลข', distractors:['เก้า','ยี่สิบ','ห้า','เจ็ด'] },
+
+  // สี
+  { hanzi:'紅', phonetic:'Fung', thai:'สีแดง', category:'สี', distractors:['สีขาว','สีดำ','สีน้ำเงิน','สีเหลือง'] },
+  { hanzi:'白', phonetic:'Ped', thai:'สีขาว', category:'สี', distractors:['สีแดง','สีดำ','สีเขียว','สีน้ำตาล'] },
+  { hanzi:'黑', phonetic:'Hed', thai:'สีดำ', category:'สี', distractors:['สีขาว','สีเทา','สีน้ำเงิน','สีเหลือง'] },
+  { hanzi:'黃', phonetic:'Wong', thai:'สีเหลือง', category:'สี', distractors:['สีแดง','สีส้ม','สีเขียว','สีชมพู'] },
+  { hanzi:'綠', phonetic:'Liug', thai:'สีเขียว', category:'สี', distractors:['สีน้ำเงิน','สีเหลือง','สีม่วง','สีแดง'] },
+  { hanzi:'藍', phonetic:'Nam', thai:'สีน้ำเงิน', category:'สี', distractors:['สีเขียว','สีม่วง','สีดำ','สีเทา'] },
+
+  // คำกริยาพื้นฐาน
+  { hanzi:'愛', phonetic:'Oi', thai:'รัก / ชอบ', category:'กริยา', distractors:['เกลียด','กลัว','ลืม','รู้'] },
+  { hanzi:'食', phonetic:'Shit', thai:'กิน', category:'กริยา', distractors:['ดื่ม','นอน','วิ่ง','ซื้อ'] },
+  { hanzi:'睡', phonetic:'Soi', thai:'นอน', category:'กริยา', distractors:['กิน','ยืน','วิ่ง','ดู'] },
+  { hanzi:'行', phonetic:'Hang', thai:'เดิน', category:'กริยา', distractors:['วิ่ง','นั่ง','นอน','บิน'] },
+  { hanzi:'講', phonetic:'Gong', thai:'พูด', category:'กริยา', distractors:['ฟัง','ดู','เขียน','อ่าน'] },
+  { hanzi:'聽', phonetic:'Tang', thai:'ฟัง', category:'กริยา', distractors:['พูด','ดู','เดิน','กิน'] },
+  { hanzi:'買', phonetic:'Mai', thai:'ซื้อ', category:'กริยา', distractors:['ขาย','ให้','รับ','เอา'] },
+  { hanzi:'賣', phonetic:'Mai3', thai:'ขาย', category:'กริยา', distractors:['ซื้อ','ให้','รับ','เอา'] },
+
+  // สถานที่
+  { hanzi:'屋家', phonetic:'Vug ga', thai:'บ้าน', category:'สถานที่', distractors:['โรงเรียน','ตลาด','วัด','โรงพยาบาล'] },
+  { hanzi:'市場', phonetic:'Si cong', thai:'ตลาด', category:'สถานที่', distractors:['บ้าน','โรงเรียน','วัด','ร้านอาหาร'] },
+  { hanzi:'學校', phonetic:'Hog hau', thai:'โรงเรียน', category:'สถานที่', distractors:['บ้าน','ตลาด','วัด','โรงพยาบาล'] },
+
+  // คำถาม
+  { hanzi:'幾多', phonetic:'Gi do', thai:'เท่าไร / กี่', category:'คำถาม', distractors:['ที่ไหน','อย่างไร','ทำไม','เมื่อไร'] },
+  { hanzi:'幾時', phonetic:'Gi si', thai:'เมื่อไร', category:'คำถาม', distractors:['เท่าไร','ที่ไหน','อย่างไร','ทำไม'] },
+  { hanzi:'喺邊', phonetic:'Hai ben', thai:'อยู่ที่ไหน', category:'คำถาม', distractors:['เท่าไร','เมื่อไร','ทำไม','อย่างไร'] },
+
+  // คุณศัพท์
+  { hanzi:'大', phonetic:'Thai', thai:'ใหญ่', category:'คุณศัพท์', distractors:['เล็ก','สูง','สั้น','กว้าง'] },
+  { hanzi:'細', phonetic:'Se', thai:'เล็ก', category:'คุณศัพท์', distractors:['ใหญ่','ยาว','หนัก','กว้าง'] },
+  { hanzi:'靚', phonetic:'Liang', thai:'สวย / หล่อ', category:'คุณศัพท์', distractors:['น่าเกลียด','แก่','เด็ก','แพง'] },
+  { hanzi:'平', phonetic:'Piang', thai:'ถูก (ราคา)', category:'คุณศัพท์', distractors:['แพง','หนัก','ใหญ่','เล็ก'] },
+  { hanzi:'貴', phonetic:'Gui', thai:'แพง', category:'คุณศัพท์', distractors:['ถูก','ใหญ่','เล็ก','หนัก'] },
+  { hanzi:'熱', phonetic:'Ngied', thai:'ร้อน', category:'คุณศัพท์', distractors:['เย็น','อุ่น','หนาว','เปียก'] },
+  { hanzi:'冷', phonetic:'Lang', thai:'เย็น / หนาว', category:'คุณศัพท์', distractors:['ร้อน','อุ่น','แห้ง','เปียก'] },
+
+  // ── สำเนียง詔安 (Zhao'an) — ทักทาย ──
+  { hanzi:'勢早', phonetic:'Si^ zao^', thai:'อรุณสวัสดิ์', category:'詔安·ทักทาย', distractors:['ลาก่อน','ขอบคุณ','สบายดีไหม','โชคดี'] },
+  { hanzi:'食飽吂?', phonetic:'Shiedˋ bau^ mangˇ?', thai:'กินข้าวยังแล้ว?', category:'詔安·ทักทาย', distractors:['สบายดีไหม?','ไปไหนมา?','ทำอะไรอยู่?','นอนหลับดีไหม?'] },
+  { hanzi:'食飽啊', phonetic:'Shiedˋ bau^ aˇ', thai:'กินข้าวแล้ว (ตอบรับ)', category:'詔安·ทักทาย', distractors:['ยังไม่ได้กิน','หิวมาก','อิ่มมาก','ไม่หิว'] },
+  { hanzi:'勞瀝', phonetic:'Loˋ ladˋ', thai:'ขอบคุณ (詔安)', category:'詔安·ทักทาย', distractors:['ไม่เป็นไร','ขอโทษ','สวัสดี','ลาก่อน'] },
+  { hanzi:'無要緊', phonetic:'Moˇ yau^ gin^', thai:'ไม่เป็นไร / ไม่ต้องห่วง', category:'詔安·ทักทาย', distractors:['ขอบคุณ','ขอโทษ','โอเค','แล้วกัน'] },
+  { hanzi:'慢慢行', phonetic:'Manˇ manˇ hangˇ', thai:'ลาก่อน / ค่อยๆ ไปนะ', category:'詔安·ทักทาย', distractors:['รีบๆ ไป','แล้วเจอกัน','สวัสดีตอนเช้า','โชคดี'] },
+  { hanzi:'再見', phonetic:'Zai^ gian^', thai:'แล้วเจอกัน', category:'詔安·ทักทาย', distractors:['สวัสดี','ขอบคุณ','ไม่เป็นไร','โอเค'] },
+
+  // ── สำเนียง詔安 — อาหาร ──
+  { hanzi:'食飯', phonetic:'Shiedˋ pon', thai:'กินข้าว', category:'詔安·อาหาร', distractors:['กินเช้า','กินเย็น','ดื่มน้ำ','ซื้ออาหาร'] },
+  { hanzi:'食朝', phonetic:'Shiedˋ zhao', thai:'กินเช้า', category:'詔安·อาหาร', distractors:['กินเย็น','กินกลางวัน','กินข้าว','ดื่มชา'] },
+  { hanzi:'食晝', phonetic:'Shiedˋ zu', thai:'กินกลางวัน', category:'詔安·อาหาร', distractors:['กินเช้า','กินเย็น','กินข้าว','ดื่มน้ำ'] },
+  { hanzi:'食夜', phonetic:'Shiedˋ ya', thai:'กินเย็น', category:'詔安·อาหาร', distractors:['กินเช้า','กินกลางวัน','กินข้าว','นอน'] },
+  { hanzi:'真好食', phonetic:'Zin^ ho^ shiedˋ', thai:'อร่อยมาก', category:'詔安·อาหาร', distractors:['ไม่อร่อยเลย','เผ็ดมาก','หวานมาก','เค็มมาก'] },
+  { hanzi:'亻厓肚枵', phonetic:'Ngaiˋ du^ hiau', thai:'ฉันหิว', category:'詔安·อาหาร', distractors:['ฉันอิ่มแล้ว','ฉันไม่หิว','ฉันกระหายน้ำ','ฉันเมื่อย'] },
+  { hanzi:'請畀杯水', phonetic:'Ciang^ bi^ bui shui^', thai:'ขอน้ำหน่อย', category:'詔安·อาหาร', distractors:['ขอเช็คบิล','ขอเมนู','อร่อยมาก','ฉันหิว'] },
+  { hanzi:'買單', phonetic:'Mai^ dan', thai:'เรียกบิล', category:'詔安·อาหาร', distractors:['ขอน้ำ','ขอเมนู','กินข้าว','อร่อย'] },
+
+  // ── สำเนียง詔安 — ครอบครัว ──
+  { hanzi:'阿姆', phonetic:'Aˇ meˇ', thai:'แม่ (詔安)', category:'詔安·ครอบครัว', distractors:['พ่อ','ย่า','น้องสาว','ลูกสาว'] },
+  { hanzi:'囝仔', phonetic:'Gian^ zai^', thai:'ลูกชาย', category:'詔安·ครอบครัว', distractors:['ลูกสาว','หลานชาย','พี่ชาย','น้องชาย'] },
+  { hanzi:'妹仔', phonetic:'Moiˋ zai^', thai:'ลูกสาว', category:'詔安·ครอบครัว', distractors:['ลูกชาย','หลานสาว','พี่สาว','น้องสาว'] },
+  { hanzi:'亻厓叫...', phonetic:'Ngaiˋ giau^ ...', thai:'ฉันชื่อ...', category:'詔安·ครอบครัว', distractors:['ฉันอายุ...','ฉันอยู่...','ฉันไป...','ฉันชอบ...'] },
+
+  // ── สำเนียง詔安 — ประโยคทั่วไป ──
+  { hanzi:'亻厓要去', phonetic:'Ngaiˋ yau^ hi', thai:'ฉันจะไป', category:'詔安·ประโยค', distractors:['ฉันจะกลับ','ฉันจะกิน','ฉันจะนอน','ฉันจะซื้อ'] },
+  { hanzi:'幾多錢?', phonetic:'Gi^ do cien?', thai:'ราคาเท่าไหร่?', category:'詔安·ประโยค', distractors:['กี่โมงแล้ว?','อยู่ที่ไหน?','ชื่ออะไร?','เป็นอะไรไหม?'] },
+  { hanzi:'亻厓聽無', phonetic:'Ngaiˋ tang^ moˇ', thai:'ฉันไม่เข้าใจ / ฟังไม่รู้เรื่อง', category:'詔安·ประโยค', distractors:['ฉันเข้าใจแล้ว','ฉันรู้','ฉันได้ยิน','ฉันจำได้'] },
+  { hanzi:'幫亻厓一下', phonetic:'Bong^ ngaiˋ yitˋ ha^', thai:'ช่วยฉันหน่อย', category:'詔安·ประโยค', distractors:['ฉันช่วยคุณ','ไม่ต้องช่วย','ขอบคุณ','ไม่เป็นไร'] },
+  { hanzi:'真好', phonetic:'Zin^ ho^', thai:'ดีมาก', category:'詔安·ประโยค', distractors:['ไม่ดีเลย','พอใช้','แย่มาก','โอเค'] },
+  { hanzi:'亻厓好好', phonetic:'Ngaiˋ ho^ ho^', thai:'ฉันสบายดี', category:'詔安·ประโยค', distractors:['ฉันไม่สบาย','ฉันเหนื่อย','ฉันหิว','ฉันง่วง'] },
+  { hanzi:'共下來去好無?', phonetic:'Kiungˇ ha loiˇ hi ho^ moˇ?', thai:'ไปด้วยกันไหม?', category:'詔安·ประโยค', distractors:['กินข้าวด้วยกันไหม?','เจอกันไหม?','โทรหาฉันนะ','แล้วเจอกัน'] },
+  { hanzi:'明朝再見', phonetic:'Minˇ zhao zai^ gian^', thai:'พรุ่งนี้เจอกัน', category:'詔安·ประโยค', distractors:['วันนี้เจอกัน','แล้วเจอกัน','เมื่อวานเจอกัน','เดี๋ยวเจอกัน'] },
+  { hanzi:'亻厓會曉講客事', phonetic:'Ngaiˋ voi^ hiau^ gong^ hakˋ sii^', thai:'ฉันพูดภาษาแฮกกาได้', category:'詔安·ประโยค', distractors:['ฉันพูดไทยได้','ฉันพูดจีนกลางได้','ฉันพูดอังกฤษได้','ฉันเรียนภาษาแฮกกา'] },
+  { hanzi:'對唔住', phonetic:'Dui^ mˇ cuˋ', thai:'ขอโทษ (詔安)', category:'詔安·ประโยค', distractors:['ขอบคุณ','ไม่เป็นไร','สวัสดี','ดีมาก'] },
+  { hanzi:'屋下在哪?', phonetic:'Vukˋ haˇ zoiˇ na^?', thai:'บ้านอยู่ที่ไหน?', category:'詔安·ประโยค', distractors:['กี่โมงแล้ว?','ราคาเท่าไหร่?','ชื่ออะไร?','ไปไหนมา?'] },
+  { hanzi:'幾點鐘?', phonetic:'Gi^ diamˋ zung?', thai:'กี่โมงแล้ว?', category:'詔安·ประโยค', distractors:['ราคาเท่าไหร่?','อยู่ที่ไหน?','ชื่ออะไร?','วันนี้วันอะไร?'] },
+];
+
+// ──────────────────────────────
+// Levels config
+// ──────────────────────────────
+const LEVELS = [
+  { name:'🌱 Beginner',     min:0,   max:50  },
+  { name:'📖 Basic',        min:50,  max:130 },
+  { name:'💬 Intermediate', min:130, max:260 },
+  { name:'🎓 Advanced',     min:260, max:450 },
+  { name:'🏆 Native',       min:450, max:999 },
+];
+
+// ──────────────────────────────
+// State
+// ──────────────────────────────
+let xp = 0;
+let streak = 0;
+let totalCorrect = 0;
+let totalAnswered = 0;
+let questionNum = 0;
+let totalQuestions = 10;
+let currentQ = null;
+let answered = false;
+let history = []; // 'correct' | 'wrong'
+let queue = [];
+let prevLevel = 0;
+
+function getLevel(x) {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (x >= LEVELS[i].min) return i;
+  }
+  return 0;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQueue() {
+  queue = shuffle([...vocab]).slice(0, totalQuestions);
+  questionNum = 0;
+  history = [];
+}
+
+// ──────────────────────────────
+// Render
+// ──────────────────────────────
+function renderXP() {
+  const lvlIdx = getLevel(xp);
+  const lvl = LEVELS[lvlIdx];
+  const nextLvl = LEVELS[lvlIdx + 1];
+  const pct = nextLvl
+    ? Math.min(100, ((xp - lvl.min) / (nextLvl.min - lvl.min)) * 100)
+    : 100;
+
+  document.getElementById('xpBar').style.width = pct + '%';
+  document.getElementById('xpLabel').textContent = `XP: ${xp}`;
+  document.getElementById('nextLabel').textContent = nextLvl
+    ? `ถัดไป: ${nextLvl.min} XP (อีก ${nextLvl.min - xp} XP)`
+    : '🏆 Max Level!';
+  document.getElementById('levelBadge').textContent = lvl.name;
+  document.getElementById('statXP').textContent = xp;
+  document.getElementById('statStreak').textContent = streak;
+  document.getElementById('statCorrect').textContent = `${totalCorrect}/${totalAnswered}`;
+}
+
+function renderDots() {
+  const c = document.getElementById('progressDots');
+  c.innerHTML = '';
+  for (let i = 0; i < totalQuestions; i++) {
+    const d = document.createElement('div');
+    d.className = 'prog-dot';
+    if (i < history.length) {
+      d.className += history[i] === 'correct' ? ' done-correct' : ' done-wrong';
+    } else if (i === questionNum) {
+      d.className += ' current';
+    }
+    c.appendChild(d);
+  }
+}
+
+function renderQuestion() {
+  if (questionNum >= totalQuestions) { showSummary(); return; }
+
+  currentQ = queue[questionNum];
+  answered = false;
+
+  document.getElementById('qNum').textContent = `คำถาม ${questionNum + 1} / ${totalQuestions}`;
+  document.getElementById('catTag').textContent = `หมวด: ${currentQ.category}`;
+  document.getElementById('hanzi').textContent = currentQ.hanzi;
+  document.getElementById('phonetic').textContent = currentQ.phonetic;
+
+  // Build choices
+  const pool = shuffle([...currentQ.distractors]).slice(0, 3);
+  const choices = shuffle([currentQ.thai, ...pool]);
+  const labels = ['A', 'B', 'C', 'D'];
+
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  choices.forEach((text, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-label">${labels[i]}</span>${text}`;
+    btn.onclick = () => handleAnswer(text, btn, choices);
+    choicesEl.appendChild(btn);
+  });
+
+  // Reset feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.getElementById('levelupBanner').className = 'levelup-banner';
+
+  renderDots();
+  renderXP();
+}
+
+function handleAnswer(selected, clickedBtn, choices) {
+  if (answered) return;
+  answered = true;
+
+  const correct = selected === currentQ.thai;
+  const gained = correct ? 10 : 2;
+  const oldLevel = getLevel(xp);
+
+  xp += gained;
+  totalAnswered++;
+  if (correct) { totalCorrect++; streak++; }
+  else { streak = 0; }
+
+  history.push(correct ? 'correct' : 'wrong');
+
+  // Style buttons
+  const allBtns = document.querySelectorAll('.choice-btn');
+  allBtns.forEach(btn => {
+    btn.disabled = true;
+    const txt = btn.textContent.slice(1).trim();
+    if (txt === currentQ.thai) btn.classList.add('correct');
+    else if (btn === clickedBtn && !correct) btn.classList.add('wrong');
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  const fbTitle = document.getElementById('fbTitle');
+  const fbDetail = document.getElementById('fbDetail');
+  const fbXP = document.getElementById('fbXP');
+
+  if (correct) {
+    fb.className = 'feedback correct-fb show fb-correct';
+    fbTitle.textContent = '✅ ถูกต้อง!';
+    fbTitle.style.color = 'var(--green)';
+  } else {
+    fb.className = 'feedback wrong-fb show fb-wrong';
+    fbTitle.textContent = '❌ ผิด';
+    fbTitle.style.color = 'var(--accent)';
+  }
+
+  fbDetail.innerHTML = `
+    <strong>${currentQ.hanzi}</strong> อ่านว่า <strong>${currentQ.phonetic}</strong><br>
+    แปลว่า <strong>${currentQ.thai}</strong><br>
+    หมวด: ${currentQ.category}
+    ${!correct ? `<br>คุณตอบ: <span style="color:var(--accent)">${selected}</span>` : ''}
+  `;
+  fbXP.textContent = `+${gained} XP`;
+
+  // Level up check
+  const newLevel = getLevel(xp);
+  if (newLevel > oldLevel) {
+    const banner = document.getElementById('levelupBanner');
+    document.getElementById('levelupText').textContent =
+      `ยินดีด้วย! คุณเลื่อนขึ้นเป็น ${LEVELS[newLevel].name} แล้ว! 🎊`;
+    banner.className = 'levelup-banner show';
+  }
+
+  renderXP();
+  renderDots();
+
+  // Play audio
+  setTimeout(() => playAudio(), 300);
+
+  // Show next btn
+  setTimeout(() => {
+    document.getElementById('nextBtn').className = 'next-btn show';
+  }, 600);
+}
+
+function nextQuestion() {
+  questionNum++;
+  renderQuestion();
+}
+
+let _voices = [];
+function _loadVoices() {
+  _voices = window.speechSynthesis.getVoices();
+}
+if ('speechSynthesis' in window) {
+  _loadVoices();
+  window.speechSynthesis.onvoiceschanged = _loadVoices;
+}
+
+function _pickVoice() {
+  const prefs = ['zh-TW','zh-HK','zh-CN','zh','cmn'];
+  for (const lang of prefs) {
+    const v = _voices.find(v => v.lang.toLowerCase().startsWith(lang.toLowerCase()));
+    if (v) return v;
+  }
+  return null;
+}
+
+function playAudio() {
+  if (!currentQ) return;
+  if (!('speechSynthesis' in window)) {
+    alert('เบราว์เซอร์ไม่รองรับ SpeechSynthesis');
+    return;
+  }
+  window.speechSynthesis.cancel();
+
+  const speak = () => {
+    const utter = new SpeechSynthesisUtterance(currentQ.hanzi);
+    const voice = _pickVoice();
+    if (voice) {
+      utter.voice = voice;
+      utter.lang = voice.lang;
+    } else {
+      utter.lang = 'zh-TW';
+    }
+    utter.rate = 0.85;
+    utter.pitch = 1.0;
+    utter.volume = 1.0;
+    window.speechSynthesis.speak(utter);
+  };
+
+  // voices อาจยังไม่โหลด — รอแล้วลองใหม่
+  if (_voices.length === 0) {
+    _voices = window.speechSynthesis.getVoices();
+    if (_voices.length === 0) {
+      setTimeout(() => { _voices = window.speechSynthesis.getVoices(); speak(); }, 300);
+      return;
+    }
+  }
+  speak();
+}
+
+function showSummary() {
+  const pct = Math.round((totalCorrect / totalAnswered) * 100);
+  const lvl = LEVELS[getLevel(xp)];
+  document.getElementById('questionCard').innerHTML = `
+    <div style="text-align:center; padding:10px 0;">
+      <div style="font-size:3rem; margin-bottom:12px;">🎓</div>
+      <h2 style="color:var(--gold); margin-bottom:8px;">จบรอบแล้ว!</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin-bottom:16px;">คุณตอบถูก ${totalCorrect}/${totalAnswered} ข้อ (${pct}%)</p>
+      <div style="background:var(--border); border-radius:10px; padding:14px; margin-bottom:16px;">
+        <div style="color:var(--gold); font-size:1.4rem; font-weight:700;">${xp} XP</div>
+        <div style="color:var(--muted); font-size:0.75rem;">${lvl.name}</div>
+      </div>
+      <button onclick="restartGame()" style="
+        background: linear-gradient(135deg, var(--green), var(--blue));
+        border: none; border-radius: 10px; padding: 12px 28px;
+        color: #000; font-weight: 700; font-size: 1rem; cursor: pointer;">
+        🔄 เล่นรอบใหม่
+      </button>
+    </div>
+  `;
+  document.getElementById('choices').innerHTML = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+}
+
+function restartGame() {
+  buildQueue();
+  document.getElementById('questionCard').innerHTML = `
+    <div class="q-num" id="qNum"></div>
+    <div style="display:flex; justify-content:center; margin-bottom:8px;">
+      <span class="category-tag" id="catTag"></span>
+    </div>
+    <div class="hanzi" id="hanzi" title="คลิกเพื่อฟังเสียง" onclick="playAudio()"></div>
+    <div class="phonetic" id="phonetic"></div>
+    <div class="audio-hint">👆 แตะตัวอักษรเพื่อฟังเสียง</div>
+    <div class="question-text">คำนี้แปลว่าอะไร?</div>
+  `;
+  renderQuestion();
+}
+
+// ──────────────────────────────
+// Voice check on load
+// ──────────────────────────────
+function openSpeechSettings() {
+  // ลองเปิด ms-settings ผ่าน iframe hidden (ทำงานใน file:// และ localhost)
+  const a = document.createElement('a');
+  a.href = 'ms-settings:speech';
+  a.click();
+}
+
+function checkVoiceAndPrompt() {
+  const hasChinese = _voices.some(v => v.lang.toLowerCase().startsWith('zh'));
+  if (!hasChinese) {
+    const banner = document.createElement('div');
+    banner.id = 'voiceBanner';
+    banner.style.cssText = `
+      width:100%; max-width:640px; background:#1a1200;
+      border:1px solid var(--gold); border-radius:12px;
+      padding:14px 16px; margin-bottom:16px; font-size:0.82rem; line-height:1.7;
+    `;
+    banner.innerHTML = `
+      <strong style="color:var(--gold)">⚠️ ไม่พบเสียงภาษาจีนใน Windows</strong><br>
+      ต้องติดตั้ง Chinese TTS ก่อนจึงจะได้ยินเสียง:<br>
+      <button onclick="openSpeechSettings()" style="
+        background:var(--blue); border:none; border-radius:6px;
+        color:#000; font-weight:700; padding:4px 12px; cursor:pointer; font-size:0.8rem;">
+        ⚙️ เปิด Speech Settings
+      </button>
+      &nbsp;→ <strong>Add voices</strong> → เลือก <strong>Chinese (Simplified)</strong> หรือ <strong>Chinese (Traditional)</strong><br>
+      <span style="color:var(--muted)">หลังติดตั้งให้รีโหลดหน้านี้</span>
+      <button onclick="document.getElementById('voiceBanner').remove()" style="
+        float:right; background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem;">✕</button>
+    `;
+    document.body.insertBefore(banner, document.querySelector('.header').nextSibling);
+  }
+}
+
+setTimeout(() => {
+  _voices = window.speechSynthesis.getVoices();
+  checkVoiceAndPrompt();
+}, 500);
+
+// ──────────────────────────────
+// Init
+// ──────────────────────────────
+buildQueue();
+renderQuestion();
+</script>
+</body>
+</html>
