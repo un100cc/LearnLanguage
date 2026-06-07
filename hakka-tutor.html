@@ -303,6 +303,20 @@
   }
   .audio-btn:hover { background: rgba(79,195,247,0.1); }
 
+  /* ── Round selector ── */
+  .round-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .round-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .round-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(245,166,35,0.1); font-weight:700; }
+
   /* ── Progress ── */
   .progress-section {
     width: 100%;
@@ -365,6 +379,15 @@
     <div class="stat-val" id="statCorrect">0/0</div>
     <div class="stat-lbl">✅ ถูก/ทั้งหมด</div>
   </div>
+</div>
+
+<!-- Round selector -->
+<div style="width:100%;max-width:640px;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+  <span style="font-size:0.75rem;color:var(--muted);">จำนวนด่าน:</span>
+  <button class="round-btn active" onclick="setRound(this,20)">20</button>
+  <button class="round-btn" onclick="setRound(this,30)">30</button>
+  <button class="round-btn" onclick="setRound(this,50)">50</button>
+  <button class="round-btn" onclick="setRound(this,vocab.length)">ทั้งหมด</button>
 </div>
 
 <!-- Progress dots -->
@@ -543,7 +566,7 @@ let streak = 0;
 let totalCorrect = 0;
 let totalAnswered = 0;
 let questionNum = 0;
-let totalQuestions = 10;
+let totalQuestions = 20;
 let currentQ = null;
 let answered = false;
 let history = []; // 'correct' | 'wrong'
@@ -564,6 +587,29 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function setRound(btn, n) {
+  document.querySelectorAll('.round-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  totalQuestions = Math.min(n, vocab.length);
+  buildQueue();
+  // reset question card in case mid-game
+  document.getElementById('questionCard').innerHTML = `
+    <div class="q-num" id="qNum"></div>
+    <div style="display:flex;justify-content:center;margin-bottom:8px;">
+      <span class="category-tag" id="catTag"></span>
+    </div>
+    <div class="hanzi" id="hanzi" title="คลิกเพื่อฟังเสียง" onclick="playAudio()"></div>
+    <div class="phonetic" id="phonetic"></div>
+    <div class="audio-hint">👆 แตะตัวอักษรเพื่อฟังเสียง</div>
+    <div class="question-text">คำนี้แปลว่าอะไร?</div>
+  `;
+  document.getElementById('choices').innerHTML = '';
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('nextBtn').className = 'next-btn';
+  document.getElementById('levelupBanner').className = 'levelup-banner';
+  renderQuestion();
 }
 
 function buildQueue() {
